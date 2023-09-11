@@ -6,9 +6,12 @@ import androidx.annotation.NonNull
 import com.google.gson.Gson
 import com.idenfy.idenfySdk.CoreSdkInitialization.IdenfyController
 import com.idenfy.idenfySdk.api.initialization.IdenfySettingsV2
+import com.idenfy.idenfySdk.api.models.DocumentCameraFrameVisibility
 import com.idenfy.idenfySdk.api.response.FaceAuthenticationResult
 import com.idenfy.idenfySdk.api.response.IdenfyIdentificationResult
+import com.idenfy.idenfySdk.api.ui.IdenfyUISettingsV2
 import com.idenfy.idenfySdk.faceauthentication.api.FaceAuthenticationInitialization
+import com.idenfy.idenfySdk.idenfycore.models.documentTypeData.DocumentTypeEnum
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -39,7 +42,20 @@ class IdenfySdkFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, P
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method == "start") {
       mResult = result
+
+      /**
+       * Camera rectangle will be hidden ONLY for French driving license
+       */
+      val countryDocumentMap: MutableMap<String, List<DocumentTypeEnum>> = mutableMapOf()
+      countryDocumentMap["FR"] = mutableListOf(DocumentTypeEnum.DRIVER_LICENSE)
+      val documentCameraFrameVisibility = DocumentCameraFrameVisibility.HiddenForSpecificCountriesAndDocumentTypes(countryDocumentMap)
+
+      val idenfyUISettingsV2 = IdenfyUISettingsV2.IdenfyUIBuilderV2()
+        .withDocumentFrameVisibility(documentCameraFrameVisibility)
+        .build()
+
       val idenfySettingsV2 = IdenfySettingsV2.IdenfyBuilderV2()
+              .withIdenfyUISettingsV2(idenfyUISettingsV2)
               .withAuthToken(call.argument<String>("authToken")!!)
               .build()
 

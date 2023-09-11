@@ -17,8 +17,23 @@ public class SwiftIdenfySdkFlutterPlugin: NSObject, FlutterPlugin {
             if let arguments = call.arguments as? [String: Any],
                let authToken = arguments["authToken"] as? String {
 
+                /**
+                 * Camera rectangle will be hidden ONLY for French driving license
+                 */
+                var countryDocumentMap: [String: [DocumentTypeEnum]] = [:]
+                countryDocumentMap["FR"] = [DocumentTypeEnum.DRIVER_LICENSE]
+
+                let documentCameraFrameVisibility = DocumentCameraFrameVisibility.hiddenForSpecificCountriesAndDocumentTypes(countryDocumentMap: countryDocumentMap)
+
+                let idenfyUISettingsV2 = IdenfyUIBuilderV2()
+                    /**
+                    * Camera rectangle will be hidden ONLY for Lithuanian passport
+                    */
+                    .withDocumentCameraFrameVisibility(documentCameraFrameVisibility).build()
+
                 let idenfySettingsV2 = IdenfyBuilderV2()
                     .withAuthToken(authToken)
+                    .withUISettingsV2(idenfyUISettingsV2)
                     .build()
 
                 let idenfyController = IdenfyController.shared
