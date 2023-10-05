@@ -1,3 +1,26 @@
+## 2.3.7
+* iOS SDK updated to 8.2.2
+* Deployment target raised to iOS 12
+* Minor HU translation fixes
+
+## 2.3.6
+* Android SDK updated to 8.2.1
+* minSdkVersion decreased to API 21
+* Face authentication virtual camera detection will work from API 26
+* HU translations fix
+
+## 2.3.5
+* Android SDK updated to 8.2.0
+* iOS SDK updated to 8.2.1
+* Added Android virtual camera checks in Face Authentication (Will result in a failed authentication)
+* Increased Android minSdkVersion raised to API 26
+* Added KYC questionnaire Color question
+* Added KYC questionnaire conditions. [More](/mobile/Android/android-sdk#custom-kyc-questionnaire)
+* Added NFC optional feature. [More](/mobile/Android/android-sdk#nfc-optional)
+* Increased photo resolution
+* Improved pdf files validation
+* Fixed minor UI fixes
+
 ## 2.3.4
 * Android SDK updated to 8.1.7.1
 * iOS SDK updated to 8.1.9
