@@ -21,7 +21,7 @@ The @idenfy/idenfy_sdk_flutter is an official Flutter plugin, which provides an 
 
 ### 1. Obtaining an authentication token
 
-The SDK requires token for starting initialization. [Token generation guide](https://github.com/idenfy/Documentation/blob/master/pages/GeneratingIdentificationToken.md)
+The SDK requires token for starting initialization. [Token generation guide](https://documentation.idenfy.com/API/GeneratingIdentificationToken)
 
 ### 2. Availability information & new project setup
 
@@ -61,7 +61,7 @@ Once the setup is completed successfully, you can add iDenfy SDK dependencies.
 To add iDenfy SDK plugin, open your project's `pubspec.yaml` file and append it with the latest iDenfy SDK flutter plugin:
 ```yaml
 dependencies:
-  idenfy_sdk_flutter: ^2.3.8
+  idenfy_sdk_flutter: ^2.4.3
 ```
 
 #### 3.1 Configuring Android project
@@ -209,7 +209,7 @@ android.jetifier.blacklist=bcprov
 
 ##### Proguard rules
 
-If you use code obfuscation for Android with a proguard-rules.pro file. You should update it with [ours](https://github.com/idenfy/Documentation/blob/master/resources/sdk/android/Proguard/proguard-rules.pro), otherwise some unexpected behaviour might occur.
+If you use code obfuscation for Android with a proguard-rules.pro file. You should update it with [ours](https://github.com/idenfy/iDenfyResources/blob/main/sdk/android/Proguard/proguard-rules.pro), otherwise some unexpected behaviour might occur.
 
 ## Usage
 
@@ -267,7 +267,6 @@ const String BASE_URL = 'ivs.idenfy.com';
 const String clientId = 'idenfySampleClientID';
 const String apiKey = 'PUT_YOUR_IDENFY_API_KEY_HERE';
 const String apiSecret = 'PUT_YOUR_IDENFY_API_SECRET_HERE';
-const FaceAuthenticationMethod faceAuthenticationMethod = FaceAuthenticationMethod.ACTIVE_LIVENESS;
 ```
 
 Calling IdenfySdkFlutter.start with provided authToken:
@@ -289,7 +288,7 @@ Calling IdenfySdkFlutter.start with provided authToken:
 
 ### Face authentication flow
 
-More on this flow, read [here](https://documentation.idenfy.com/other-fraud/FaceAuthentication).
+More on this flow, read [here](https://documentation.idenfy.com/face-auth/mobile-sdk/Android/FaceAuthenticationAndroid).
 
 Firstly, import idenfysdkflutter.dart file:
 ```javascript
@@ -300,27 +299,19 @@ After successful integration you should be able to call IdenfySdkFlutter.startFa
 
 If the project is not successfully compiled or runtime issues occur, make sure you have followed the steps. For better understanding you may check the sample app in this repository.
 
-Firsty, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
+Firstly, you should check for the authentication status, whether the face authentication can be performed. Having checked that, you will receive a token status:
 
 | Name             | Description                                                                                                                                      |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ENROLLMENT`     | The user must perform an enrollment, since the identification was performed with an older face tec version (Before face authentication update)   |
 | `AUTHENTICATION` | The user can authenticate by face                                                                                                                |
-| `IDENTIFICATION` | The user must perform an identification
-
-ENROLLMENT only applies to ACTIVE_LIVENESS authentication method and from a user perspective is identical to AUTHENTICATION, although ENROLLMENT is basically registration for authentication - whichever face client used for enrollment, that face will then work for subsequent authentications.
-
-Enrollment is recommended to be used for these cases:
-1. Client was on-boarded using an old version of the SDK and therefore not registered for authentication.
-2. Client failed an automated liveliness check during on-boarding and therefore was not registered for authentication.
-3. Client is registered for authentication, but for whatever reason wishes to change the face used for authentication.
+| `IDENTIFICATION` | The user must perform an identification                                                                                                          |
 
 Everything can be done with following code, found in the example app:
 
 ```javascript
-  Future<String> getFaceAuthTokenType(String scanref, FaceAuthenticationMethod authenticationMethod) async {
+  Future<String> getFaceAuthTokenType(String scanref, String authenticationMethod) async {
     final queryParameters = {
-      'method': authenticationMethod.name,
+      'method': authenticationMethod,
     };
     final response = await http.get(
       Uri.https(Constants.BASE_URL,
@@ -339,7 +330,7 @@ Everything can be done with following code, found in the example app:
     }
   }
 
-  Future<String> getFaceAuthTokenRequest(String scanref, String tokenType, FaceAuthenticationMethod authenticationMethod) async {
+  Future<String> getFaceAuthTokenRequest(String scanref, String tokenType, String authenticationMethod) async {
     final response = await http.post(
       Uri.https(Constants.BASE_URL, '/partner/authentication-info'),
       headers: <String, String>{
@@ -352,7 +343,7 @@ Everything can be done with following code, found in the example app:
       body: jsonEncode(<String, String>{
         "scanRef": scanref,
         "type": tokenType,
-        "method": authenticationMethod.name
+        "method": authenticationMethod
       }),
     );
     if (response.statusCode == 200) {
@@ -363,7 +354,7 @@ Everything can be done with following code, found in the example app:
   }
 
   Future<void> initIdenfyFaceAuth(String scanref) async {
-    FaceAuthenticationMethod authenticationMethod = Constants.faceAuthenticationMethod;
+    String authenticationMethod = "FACE_MATCHING";
   
     FaceAuthenticationResult? faceAuthenticationResult;
     Exception? localException;
@@ -373,10 +364,6 @@ Everything can be done with following code, found in the example app:
       switch (faceAuthTokenType) {
         case 'AUTHENTICATION':
           //The user can authenticate by face
-          token = await getFaceAuthTokenRequest(scanref, faceAuthTokenType, authenticationMethod);
-          break;
-        case 'ENROLLMENT':
-          //The user must perform an enrollment, since the identification was performed with an older face tec version
           token = await getFaceAuthTokenRequest(scanref, faceAuthTokenType, authenticationMethod);
           break;
         default:
@@ -423,7 +410,6 @@ const String BASE_URL = 'ivs.idenfy.com';
 const String clientId = 'idenfySampleClientID';
 const String apiKey = 'PUT_YOUR_IDENFY_API_KEY_HERE';
 const String apiSecret = 'PUT_YOUR_IDENFY_API_SECRET_HERE';
-const FaceAuthenticationMethod faceAuthenticationMethod = FaceAuthenticationMethod.ACTIVE_LIVENESS;
 ```
 
 ## Callbacks
@@ -476,7 +462,7 @@ Information about the IdenfyIdentificationResult **suspectedIdentificationStatus
 
 *Note
 The manualIdentificationStatus status always returns INACTIVE status, unless your system implements manual identification callback, but does not create **a separate waiting screen** for indicating about the ongoing manual identity verification process.
-For better customization we suggest using the [immediate redirect feature ](#customizing-results-callbacks-v2-optional). As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
+For better customization we suggest using the immediate redirect feature. As a result, the user will not see an automatic identification status, provided by iDenfy service. The SDK will be closed while showing loading indicators.
 
 ### Face authentication flow
 Callback from the SDK can be retrieved from IdenfySdkFlutter.startFaceAuth future:
@@ -513,7 +499,7 @@ Currently, @idenfy/idenfysdk_flutter_plugin does not provide customization optio
 We suggest creating a fork of this repository. After editing the code, you can include the plugin in the following way:
 ```yaml
 dependencies:
-  idenfy_sdk_flutter: ^2.3.8
+  idenfy_sdk_flutter: ^2.4.3
     git: https://github.com/your_repo/FlutterSDK.git
 ```
 
@@ -532,7 +518,7 @@ To change the **colors**:
     <color name="idenfyBackgroundColorV2">#FFFFFF</color>
 </resources>
 ```
-Our common color names can be found in [this repository](https://github.com/idenfy/Documentation/blob/master/resources/sdk/android/colors/colors_v2.xml) along with [specific screen colors](https://github.com/idenfy/Documentation/blob/master/resources/sdk/android/colors/colors.zip)
+Our common color names can be found in [this repository](https://github.com/idenfy/iDenfyResources/tree/main/sdk/android/colors/colors_v2.xml) along with [specific screen colors](https://github.com/idenfy/iDenfyResources/tree/main/sdk/android/colors/colors.zip)
 
 To edit the **Toolbar** or change styles (Text sizes, colors) for specific views:
 1. Open your Android application values folder (yourapplication/app/src/main/res/values)  
@@ -587,14 +573,14 @@ To edit the **Toolbar** or change styles (Text sizes, colors) for specific views
 </resources>
 ```
 
-All our styles can be found in [here](https://github.com/idenfy/Documentation/blob/master/resources/sdk/android/styles/styles.zip).
+All our styles can be found in [here](https://github.com/idenfy/iDenfyResources/tree/main/sdk/android/styles/styles.zip).
 
 To edit our **layouts**:
 1. Open or create your Android application layout folder (yourapplication/app/src/main/res/layout) and copy our layout xml files here  
    <img src="doc/images/idenfy_img_example_layout.png" width="300"/>
 2. Change the fonts, views however you want. Just make sure you **Do not remove ids of the components** and **keep same layout names**, otherwise this will cause runtime crashes or the layouts won't be overridden.
 
-Our layouts can be found [here](https://github.com/idenfy/Documentation/blob/master/resources/sdk/android/layouts/layouts.zip)
+Our layouts can be found [here](https://github.com/idenfy/iDenfyResources/tree/main/sdk/android/layouts/layouts.zip)
 
 To edit common **IdenfySettings** use the **IdenfysdkFlutterPlugin.kt** file like so:
 
@@ -860,7 +846,7 @@ public class SwiftIdenfySdkFlutterPlugin: NSObject, FlutterPlugin {
 
 ```
 
-UISettings classes for the rest of the screens can be found in our [repository](https://github.com/idenfy/Documentation/tree/master/resources/sdk/ios/uicustomization).
+UISettings classes for the rest of the screens can be found in our [repository](https://github.com/idenfy/iDenfyResources/tree/main/sdk/ios/uicustomization).
 
 Fore more extensive customization, please caerfully follow our [IOS native SDK guide](https://documentation.idenfy.com/UI/IOSUICustomization) and edit **SwiftIdenfysdkFlutterPlugin.swift** even further.
 

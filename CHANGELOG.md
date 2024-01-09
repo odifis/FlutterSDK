@@ -1,3 +1,36 @@
+## 2.4.3
+* Added new face detection descriptions 
+* Added support for additional step ordering
+* Removed instructions drawer option from camera view
+* Face authentication session improvements
+* iOS view instances, passed to the IdenfyViewsV2 class, will reset their state on repetitive launches.
+* Changed photo cropping to preserve higher resolution
+* Updated 3D Face liveness version
+* After capturing photos, camera results view will appear instantly
+* If you have customized iOS or Android native code, please check out the api changes, that might affect you in the [iOS](https://documentation.idenfy.com/mobile/iOS/migration-guide/ios-migrations) and [Android](https://documentation.idenfy.com/mobile/Android/migration-guide/android-migrations) migration guides.
+
+## 2.4.2
+* Updated README with new links
+
+## 2.4.1
+* iOS SDK updated to 8.2.4
+* Android SDK updated to 8.2.8
+* Face authentication session, virtual camera detection improvements
+
+## 2.4.0
+* iOS SDK updated to 8.2.3
+* Added camera initialization error alert
+* Added questionnaire file upload validations
+* Updated Face Liveness version
+* Small UI glitch and bug fixes
+
+## 2.3.9
+* Android SDK updated to 8.2.7
+* Added camera initialization error alert
+* Updated Face Liveness version
+* Jcenter repository removed
+* Bug fixes
+
 ## 2.3.8
 * Android SDK updated to 8.2.6
 * Face authentication virtual camera detection improvements (Better detection rate)
