@@ -1,3 +1,57 @@
+## 2.5.5
+* iOS SDK updated to 8.5.2
+* Android SDK updated to 8.5.1
+* Added Chinese simplified language support
+* Added 3D Face liveness upload attempt validation
+* Added missing Face authentication auto capture [feature](https://documentation.idenfy.com/face-auth/mobile-sdk/Android/FaceAuthenticationAndroid#auto-capture) translations
+
+## 2.5.4
+* Android, iOS SDK's updated to 8.5.0
+* Face authentication auto capture [feature](https://documentation.idenfy.com/face-auth/mobile-sdk/Android/FaceAuthenticationAndroid#auto-capture)
+* Updated 3D Face liveness version
+* Improved document blur, glare detection
+* Bug fixes
+
+## 2.5.3
+* iOS SDK updated to 8.4.5
+* Android SDK updated to 8.4.2
+* Added Danish, Greek, Croatian, Norwegian, Serbian, Finnish, Turkish languages
+* Added Image upload attempt validation
+* Added virtual camera detection for Android IDV [feature](https://documentation.idenfy.com/mobile/Android/android-sdk#virtual-camera-detection) (Will result in a failed identification)
+* Updated Document Recognition [feature](https://documentation.idenfy.com/mobile/Android/android-sdk#document-recognition)
+* Improved phone number validation for KYC questionnaire
+* Updated 3D Face liveness version for iOS
+* Bug fixes
+
+## 2.5.2
+* iOS SDK updated to 8.4.2
+* Updated lottie-ios to 4.4.3
+* Increased minimum deployment target to iOS 13
+* Please update to this version to avoid Apple Review team [privacy manifest file](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files) warning
+
+## 2.5.1
+* iOS SDK updated to 8.4.1
+* Updated 3D Face liveness version
+* Updated lottie-ios to 4.4.1
+
+## 2.5.0
+* iOS SDK updated to 8.4.0
+* Android SDK updated to 8.4.1
+* Added photo validation after each step by default
+* Added passive liveness validation feature
+* Added rooted device, emulator detection
+* Added work permit document type
+* Updated 3D Face liveness version
+* Android targetSdk increased to API 34
+* Updated Android Gradle version to 8.1.2, Kotlin version to 1.9.20
+* Changed Android loading spinner animation
+* Android CameraX updated
+* 3D Face liveness error handling, retry logic improvements
+* Dynamic OnBoarding screen removed
+* Privacy policy submission fix
+* Other bug fixes 
+* If you have customized iOS or Android native code, please check out the api changes, that might affect you in the [iOS](https://documentation.idenfy.com/mobile/iOS/migration-guide/ios-migrations) and [Android](https://documentation.idenfy.com/mobile/Android/migration-guide/android-migrations) migration guides.
+
 ## 2.4.6
 * Added documentation for public API
 * Refactored public enum files

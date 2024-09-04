@@ -38,7 +38,7 @@ post_install do |installer|
     end
     if target.name == "idenfy_sdk_flutter"
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         config.build_settings['ENABLE_BITCODE'] = 'NO'
       end
     end
@@ -49,7 +49,7 @@ end
 
 Minimum required versions by the platform:
 
-**IOS - 12.0**
+**IOS - 13.0**
 
 **Android - API 24**
 
@@ -61,7 +61,7 @@ Once the setup is completed successfully, you can add iDenfy SDK dependencies.
 To add iDenfy SDK plugin, open your project's `pubspec.yaml` file and append it with the latest iDenfy SDK flutter plugin:
 ```yaml
 dependencies:
-  idenfy_sdk_flutter: ^2.4.6
+  idenfy_sdk_flutter: ^2.5.5
 ```
 
 #### 3.1 Configuring Android project
@@ -78,10 +78,6 @@ Configure your application's `gradle.properties` file:
 ```gradle
 android.useAndroidX=true
 android.enableJetifier=true
-//For gradle 7+
-android.jetifier.ignorelist=bcprov
-//otherwise
-android.jetifier.blacklist=bcprov
 ```
 
 Make sure you are using Kotlin >= 1.5.31 version (Since 1.5 version of iDenfy package)
@@ -134,7 +130,7 @@ post_install do |installer|
     end
     if target.name == "idenfy_sdk_flutter"
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         config.build_settings['ENABLE_BITCODE'] = 'NO'
       end
     end
@@ -142,7 +138,7 @@ post_install do |installer|
   end
 end
 ```
-This script ensures that "lottie-ios" have module stability as well as IOS 12.0 support, which is required for the NFC feature.
+This script ensures that "lottie-ios" have module stability as well as IOS 13.0 support, which is required for the NFC feature.
 #### 3. Running pod install
 After that, install the pods:
 ```shell
@@ -195,21 +191,16 @@ end
 ```
 
 #### Android
-If this error occurs:
-
-Failed to transform bcprov-jdk15on-1.69.jar (org.bouncycastle:bcprov-jdk15on:1.69) to match attributes {artifactType=android-java-res, org.gradle.category=library, org.gradle.libraryelements=jar, org.gradle.status=release, org.gradle.usage=java-runtime}.
-
-Be sure to add the following lines to your application's `gradle.properties` file:
-```gradle
-//For gradle 7+
-android.jetifier.ignorelist=bcprov
-//otherwise
-android.jetifier.blacklist=bcprov
-```
 
 ##### Proguard rules
 
 If you use code obfuscation for Android with a proguard-rules.pro file. You should update it with [ours](https://github.com/idenfy/iDenfyResources/blob/main/sdk/android/Proguard/proguard-rules.pro), otherwise some unexpected behaviour might occur.
+
+Also, since AGP 8.0 enables R8 full mode by default, make sure you have disabled R8 full mode in the **gradle.properties** file:
+
+```gradle
+android.enableR8.fullMode=false
+```
 
 ## Usage
 
@@ -499,7 +490,7 @@ Currently, @idenfy/idenfysdk_flutter_plugin does not provide customization optio
 We suggest creating a fork of this repository. After editing the code, you can include the plugin in the following way:
 ```yaml
 dependencies:
-  idenfy_sdk_flutter: ^2.4.6
+  idenfy_sdk_flutter: ^2.5.5
     git: https://github.com/your_repo/FlutterSDK.git
 ```
 
